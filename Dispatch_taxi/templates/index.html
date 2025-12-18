@@ -81,6 +81,38 @@
                 <span>Страница оператора</span>
             </a>
         </div>
+        <div style="margin-bottom: 30px;">
+        <h2>Статистика</h2>
+        {% if flask_stats and flask_stats.success %}
+            <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; border-left: 4px solid #4CAF50;">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                    <div style="background: white; padding: 15px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <h4 style="margin-top: 0; color: #2196F3;">Всего заказов</h4>
+                        <p style="font-size: 24px; font-weight: bold; margin: 10px 0;">{{ flask_stats.statistics.total_orders }}</p>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <h4 style="margin-top: 0; color: #FF9800;">Активных заказов</h4>
+                        <p style="font-size: 24px; font-weight: bold; margin: 10px 0;">{{ flask_stats.statistics.active_orders }}</p>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <h4 style="margin-top: 0; color: #9C27B0;">Водителей</h4>
+                        <p style="font-size: 24px; font-weight: bold; margin: 10px 0;">{{ flask_stats.statistics.total_drivers }}</p>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <h4 style="margin-top: 0; color: #009688;">Клиентов</h4>
+                        <p style="font-size: 24px; font-weight: bold; margin: 10px 0;">{{ flask_stats.statistics.total_customers }}</p>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                <p style="margin: 0;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Flask API недоступен. Запустите Flask сервер на порту 5000.
+                </p>
+            </div>
+        {% endif %}
+    </div>
     </div>
 </div>
 
