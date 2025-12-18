@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>{{ title }}</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label>ФИО *</label>
+            {{ form.full_name }}
+            {% if form.full_name.errors %}
+                <div class="alert alert-error">
+                    {% for error in form.full_name.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label>Телефон *</label>
+            {{ form.phone }}
+            <small style="color: #666; display: block; margin-top: 5px;">
+            </small>
+            {% if form.phone.errors %}
+                <div class="alert alert-error">
+                    {% for error in form.phone.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div style="display: flex; gap: 15px; margin-top: 30px;">
+            <button type="submit" class="btn btn-success">
+                {% if customer %}Сохранить изменения{% else %}Добавить клиента{% endif %}
+            </button>
+            {% if customer %}
+                <a href="{% url 'customer_detail' customer.pk %}" class="btn btn-danger">Отмена</a>
+            {% else %}
+                <a href="{% url 'customer_list' %}" class="btn btn-danger">Отмена</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% endblock %}

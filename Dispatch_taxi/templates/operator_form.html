@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>{{ title }}</h1>
+    
+    {% if operator %}
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #FF9800;">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div>
+                    <strong style="font-size: 18px;">Редактирование оператора: {{ operator.full_name }}</strong><br>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+                <h3>Основная информация</h3>
+                
+                <div class="form-group">
+                    <label>ФИО *</label>
+                    <div style="display: flex; gap: 10px;">
+                        {{ form.full_name }}
+                    </div>
+                    {% if form.full_name.errors %}
+                        <div class="alert alert-error">
+                            {{ form.full_name.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label>Телефон *</label>
+                    {{ form.phone }}
+                    {% if form.phone.errors %}
+                        <div class="alert alert-error">
+                            {% for error in form.phone.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px; display: flex; gap: 15px;">
+            <button type="submit" class="btn btn-success">
+                {% if operator %}Сохранить изменения{% else %}Создать оператора{% endif %}
+            </button>
+            
+            {% if operator %}
+                <a href="{% url 'operator_detail'  %}" class="btn btn-danger">Отмена</a>
+            {% else %}
+                <a href="{% url 'operator_detail' %}" class="btn btn-danger">Отмена</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% endblock %}

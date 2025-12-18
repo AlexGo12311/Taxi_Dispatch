@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Удаление тарифа{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="alert alert-danger" style="border-left: 4px solid #dc3545; padding-left: 20px;">
+        <h1 style="color: #dc3545; margin-top: 0;">Удаление тарифа</h1>
+        <p style="font-size: 1.2em; margin-bottom: 20px;">
+            Вы уверены, что хотите удалить тариф <strong>{{ tariff.name }}</strong>?
+        </p>
+    </div>
+
+    {% if tariff.orders.status == 'in_progress' %}
+        <div class="alert alert-warning">
+            <h3>Внимание!</h3>
+            <p>Этот тариф используется в {{ tariff.orders.count }} заказ(ах).</p>
+            <p>Удаление тарифа невозможно, пока он используется в активных заказах.</p>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <a href="{% url 'tariff_list' %}" class="btn btn-danger">Вернуться к списку</a>
+        </div>
+    {% else %}
+        <form method="post">
+            {% csrf_token %}
+            <div style="display: flex; gap: 15px; margin-top: 20px;">
+                <button type="submit" class="btn btn-danger">
+                    Удалить тариф
+                </button>
+                <a href="{% url 'tariff_list'  %}" class="btn">Отмена</a>
+            </div>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

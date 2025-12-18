@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Удаление оператора{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="alert alert-danger" style="border-left: 4px solid #dc3545; padding-left: 20px;">
+        <h1 style="color: #dc3545; margin-top: 0;">Удаление оператора</h1>
+        <p style="font-size: 1.2em; margin-bottom: 20px;">
+            Вы уверены, что хотите удалить оператора <strong>{{ operator.full_name }}</strong>?
+        </p>
+    </div>
+    
+    {% with orders=operator.orders.all %}
+        {% if orders %}
+            <div class="alert alert-warning">
+                <h3>Внимание!</h3>
+                <p>Этот оператор обслуживает {{ orders.count }} заказ(ов).</p>
+                <p>Удаление оператора невозможно, пока у него есть активные или исторические заказы.</p>
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <a href="{% url 'operator_detail'  %}" class="btn">
+                    <i class="fas fa-arrow-left"></i> Вернуться к оператору
+                </a>
+            </div>
+        {% else %}
+            
+            <form method="post">
+                {% csrf_token %}
+                <div style="display: flex; gap: 15px; margin-top: 20px;">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Да, удалить оператора
+                    </button>
+                    <a href="{% url 'operator_detail'  %}" class="btn">
+                        <i class="fas fa-times"></i> Нет, отменить
+                    </a>
+                </div>
+            </form>
+            
+            <div style="margin-top: 30px; padding: 15px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px;">
+                <h3 style="color: #856404; margin-top: 0;">Важно!</h3>
+                <p style="color: #856404; margin-bottom: 0;">
+                    Это действие нельзя отменить. Все данные об операторе будут удалены безвозвратно.
+                </p>
+                <p style="color: #856404; margin-top: 10px; margin-bottom: 0;">
+                    После удаления оператора невозможно восстановить его данные.
+                </p>
+            </div>
+        {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}

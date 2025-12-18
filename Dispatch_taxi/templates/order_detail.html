@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Заказ {% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div>
+            <a href="{% url 'order_edit' order.pk %}" class="btn btn-warning">Изменить</a>
+            <a href="{% url 'order_delete' order.pk %}" class="btn btn-danger">Удалить</a>
+        </div>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+        <div>
+            <h3>Информация о заказе</h3>
+            <table style="width: 100%; margin-bottom: 20px;">
+                <tr>
+                    <td style="padding: 8px 0; width: 40%;"><strong>Клиент:</strong></td>
+                    <td><a href="{% url 'customer_detail' order.customer.pk %}">{{ order.customer.full_name }}</a></td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0; width: 40%;"><strong>Автомобиль:</strong></td>
+                    {% if order.vehicle %}
+                        <td> <a href="{% url 'vehicle_detail' order.vehicle.pk %}">{{ order.vehicle.brand }} {{ order.vehicle.model }}</a></td>
+                    {% else %}
+                        <td>Автомобиль не назначен</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0; width: 40%;"><strong>Тариф:</strong></td>
+                    {% if order.tariff %}
+                        <td> {{ order.tariff.name }} ({{ order.tariff.cost_for_km }} руб/км)</td>
+                    {% else %}
+                        <td>Тариф не назначен</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0;"><strong>Расстояние:</strong></td>
+                    <td>{{ order.range }} км</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0;"><strong>Дата и время:</strong></td>
+                    <td>{{ order.order_time|date:"d.m.Y H:i" }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0;"><strong>Статус:</strong></td>
+                    <td>
+                        {% if order.status == 'in_progress' %}
+                            <span class="badge badge-warning">В процессе</span>
+                        {% elif order.status == 'completed' %}
+                            <span class="badge badge-success">Завершен</span>
+                        {% elif order.status == 'cancelled' %}
+                            <span class="badge badge-danger">Отменен</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                 <tr>
+                    <td style="padding: 8px 0;"><h3>Итоговая стоимость:</h3></td>
+                     <td><h3>{{ order.total_cost|floatformat:2 }} руб.</h3></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
+        <a href="{% url 'order_list' %}" class="btn">Назад к списку</a>
+    </div>
+</div>
+{% endblock %}

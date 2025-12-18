@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>{{ title }}</h1>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <h3>Основная информация</h3>
+        <div class="form-group">
+            <label>ФИО *</label>
+            {{ driver_form.full_name }}
+            {% if driver_form.full_name.errors %}
+                <div class="alert alert-error">{{ driver_form.full_name.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label>Телефон *</label>
+            {{ driver_form.phone }}
+            {% if driver_form.phone.errors %}
+                <div class="alert alert-error">{{ driver_form.phone.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <h3>Дополнительная информация</h3>
+        <div class="form-group">
+            <label>Дата рождения</label>
+            {{ info_form.birth_date }}
+        </div>
+        
+        <div class="form-group">
+            <label>Водительское удостоверение *</label>
+            {{ info_form.driver_license }}
+            {% if info_form.driver_license.errors %}
+                <div class="alert alert-error">{{ info_form.driver_license.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label>Фото</label>
+            {{ info_form.photo }}
+        </div>
+        
+        <div class="form-group">
+            <label>Стаж вождения (лет)</label>
+            {{ info_form.experience_years }}
+        </div>
+
+        <div class="form-group">
+            <label>Пол</label>
+            {{ info_form.gender }}
+        </div>
+        
+        <div style="display: flex; gap: 15px; margin-top: 30px;">
+            <button type="submit" class="btn">Сохранить</button>
+            {% if driver %}
+                <a href="{% url 'driver_detail' driver.pk %}" class="btn btn-danger">Отмена</a>
+            {% else %}
+                <a href="{% url 'driver_list' %}" class="btn btn-danger">Отмена</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% endblock %}

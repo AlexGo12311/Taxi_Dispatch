@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>{{ title }}</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+                <h3>Основная информация</h3>
+                
+                <div class="form-group">
+                    <label>{{ form.customer.label }} *</label>
+                    {{ form.customer }}
+                    {% if form.customer.errors %}
+                        <div class="alert alert-error">
+                            {% for error in form.customer.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% if form.initial.customer %}
+                    <small style="color: #4CAF50; display: block; margin-top: 5px;">
+                        <i class="fas fa-info-circle"></i> Клиент выбран.
+                    </small>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label>Автомобиль</label>
+                    {{ form.vehicle }}
+                    {% if form.vehicle.errors %}
+                        <div class="alert alert-error">{{ form.vehicle.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label>Тариф</label>
+                    {{ form.tariff }}
+                    {% if form.tariff.errors %}
+                        <div class="alert alert-error">{{ form.tariff.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div>
+                <h3>Детали заказа</h3>
+                
+                <div class="form-group">
+                    <label>Расстояние *</label>
+                    {{ form.range }}
+                    {% if form.range.errors %}
+                        <div class="alert alert-error">{{ form.range.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label>Статус</label>
+                    {{ form.status }}
+                </div>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 15px; margin-top: 30px;">
+            <button type="submit" class="btn">Сохранить</button>
+                <a href="{% url 'order_list' %}" class="btn btn-danger">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

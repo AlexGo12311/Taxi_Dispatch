@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ driver.full_name }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1>{{ driver.full_name }}</h1>
+        <div>
+            <a href="{% url 'driver_edit' driver.pk %}" class="btn btn-warning">Изменить</a>
+            <a href="{% url 'driver_delete' driver.pk %}" class="btn btn-danger">Удалить</a>
+        </div>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;">
+        <div>
+            {% if driver_info and driver_info.photo %}
+                <img src="{{driver_info.get_photo_url}}" alt="{{ driver.full_name }}" style="width: 100%; border-radius: 8px;">
+            {% else %}
+                <div style="background: #f0f0f0; height: 300px; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                    <span>Фото отсутствует</span>
+                </div>
+            {% endif %}
+            
+            <div style="margin-top: 20px;">
+                <h3>Контактная информация</h3>
+                <p><strong>Телефон:</strong> {{ driver.phone }}</p>
+            </div>
+        </div>
+        
+        <div>
+            {% if driver_info %}
+                <h3>Дополнительная информация</h3>
+                <table style="width: 100%; margin-bottom: 20px;">
+                    <tr>
+                        <td style="padding: 8px 0;"><strong>Дата рождения:</strong></td>
+                        <td>{{ driver_info.birth_date|date:"d.m.Y"|default:"-" }}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0;"><strong>Водительское удостоверение:</strong></td>
+                        <td>{{ driver_info.driver_license|default:"-" }}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0;"><strong>Стаж вождения (лет):</strong></td>
+                        <td>{{ driver_info.experience_years }} </td>
+                    </tr>
+                     <tr>
+                        <td style="padding: 8px 0;"><strong>Пол:</strong></td>
+                        <td>{{ driver_info.get_gender_display }}</td>
+                    </tr>
+                </table>
+            {% else %}
+                <div class="alert alert-warning">
+                    Дополнительная информация о водителе отсутствует.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
+        <a href="{% url 'driver_list' %}" class="btn">Назад к списку</a>
+    </div>
+</div>
+{% endblock %}

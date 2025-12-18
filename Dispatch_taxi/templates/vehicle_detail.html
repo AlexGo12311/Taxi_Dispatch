@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ vehicle.brand }} {{ vehicle.model }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1>{{ vehicle.brand }} {{ vehicle.model }}</h1>
+        <div>
+            <a href="{% url 'vehicle_edit' vehicle.pk %}" class="btn btn-warning">Изменить</a>
+            <a href="{% url 'vehicle_delete' vehicle.pk %}" class="btn btn-danger">Удалить</a>
+        </div>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;">
+        <div>
+            <h3><strong>Водитель:
+            {% if vehicle.driver %}
+                <a href="{% url 'driver_detail' vehicle.driver.pk %}">{{ vehicle.driver.full_name }} </a>
+            {% else %}
+                Водитель не назначен
+            {% endif %}</strong></h3>
+            <div style="margin-top: 20px;">
+                <h2>Основная информация</h2>
+                <p><strong>Номерной знак:</strong> {{ vehicle.license_plate }}</p>
+                <p><strong>Цвет:</strong> {{ vehicle.get_color_display }}</p>
+                <p><strong>Год выпуска:</strong> {{ vehicle.year }}</p>
+                <p><strong>Пробег (км):</strong> {{ vehicle.mileage }}</p>
+            </div>
+        </div>
+
+    </div>
+    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
+        <a href="{% url 'vehicle_list' %}" class="btn">Назад к списку</a>
+    </div>
+</div>
+{% endblock %}

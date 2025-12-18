@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>{{ title }}</h1>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label>Водитель *</label>
+            {{ form.driver }}
+            {% if form.driver.errors %}
+                <div class="alert alert-error">{{ form.driver.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label>Марка *</label>
+            {{ form.brand }}
+            {% if form.brand.errors %}
+                <div class="alert alert-error">{{ form.brand.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label>Модель *</label>
+            {{ form.model }}
+            {% if form.model.errors %}
+                <div class="alert alert-error">{{ form.model.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label>Номерной знак *</label>
+            {{ form.license_plate }}
+            {% if form.license_plate.errors %}
+                <div class="alert alert-error">{{ form.license_plate.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label>Цвет</label>
+            {{ form.color }}
+        </div>
+
+        
+        <div class="form-group">
+            <label>Год выпуска *</label>
+            {{ form.year }}
+            {% if form.year.errors %}
+                <div class="alert alert-error">{{ form.year.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label>Пробег *</label>
+            {{ form.mileage }}
+        </div>
+        
+        <div style="display: flex; gap: 15px; margin-top: 30px;">
+            <button type="submit" class="btn">Сохранить</button>
+            {% if vehicle %}
+                <a href="{% url 'vehicle_detail' vehicle.pk %}" class="btn btn-danger">Отмена</a>
+            {% else %}
+                <a href="{% url 'vehicle_list' %}" class="btn btn-danger">Отмена</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% endblock %}

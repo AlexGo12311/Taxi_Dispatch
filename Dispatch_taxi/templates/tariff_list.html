@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Тарифы{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1>Тарифы</h1>
+        <a href="{% url 'tariff_create' %}" class="btn btn-success">Добавить тариф</a>
+    </div>
+    
+    {% if tariffs_list %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Стоимость</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tariff in tariffs_list %}
+                <tr>
+                    <td>
+                        <strong>{{ tariff.name }}</strong>
+                    </td>
+                    <td>
+                        <span class="badge badge-primary" style="font-size: 1.1em;">
+                            {{ tariff.cost_for_km }} руб/км
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{% url 'tariff_edit' tariff.pk %}" class="btn btn-sm btn-warning">Изменить</a>
+                        <a href="{% url 'tariff_delete' tariff.pk %}" class="btn btn-sm btn-danger">Удалить</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-warning">
+            Тарифы не найдены.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

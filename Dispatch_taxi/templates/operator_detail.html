@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Оператор {% endblock %}
+
+{% block content %}
+<div class="card">
+  {% if operators %}
+    {% for operator in operators %}
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h1>Оператор: {{ operator.full_name }}</h1>
+          <div>
+              <a href="{% url 'operator_edit' operator.pk %}" class="btn btn-warning">Изменить</a>
+              <a href="{% url 'operator_delete' operator.pk %}" class="btn btn-danger">Удалить</a>
+          </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;">
+          <div>
+
+              <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                  <h3 style="margin-top: 0;">Контактная информация</h3>
+                  <h4 style="padding: 8px 0; width: 40%;"><strong>Телефон:</strong>
+                          {{ operator.phone }}</h4>
+              </div>
+          </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="alert alert-warning">Операторы не найдены.</div>
+    <a href="{% url 'operator_create' %}" class="btn">Создать оператора</a>
+  {% endif %}
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; display: flex; gap: 15px;">
+          <a href="{% url 'index' %}" class="btn">
+              <i class="fas fa-arrow-left"></i> Назад, на главную
+          </a>
+      </div>
+</div>
+{% endblock %}
