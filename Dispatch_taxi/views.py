@@ -2,6 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.db import models
 from django.db.models import Q
+from .flask_client import FlaskAPIClient
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 from .models import Driver, Vehicle, Order, Customer, Tariff, Operator
 from .forms import DriverForm, DriverInfoForm, VehicleForm, OrderForm, CustomerForm, TariffForm, OperatorForm
@@ -15,8 +20,11 @@ def index(request):
         'total_customers' : Customer.objects.count(),
         'total_tariffs' : Tariff.objects.count()
     }
+    flask_stats = FlaskAPIClient.get_statistics()
+
     return render(request, 'index.html', {
         'stats': stats,
+        'flask_stats': flask_stats if flask_stats.get('success') else None,
     })
 
 def driver_list(request):
@@ -374,6 +382,7 @@ def get_busy_vehicles():
 def order_list(request):
     orders_list = Order.objects.all().select_related('customer', 'vehicle', 'tariff')
     search = request.GET.get('search', '')
+    flask_orders = FlaskAPIClient.get_orders()
     if search:
         orders_list = orders_list.filter(customer__full_name__icontains=search)
     status = request.GET.get('status', '')
@@ -412,6 +421,7 @@ def order_list(request):
         'max_price': max_price,
         'sort': sort,
         'status_choices': Order.STATUS_CHOICES,
+        'flask_orders': flask_orders if flask_orders.get('success') else None,
     })
 
 
@@ -494,6 +504,23 @@ def order_delete(request, pk):
     return render(request, 'order_confirm_delete.html', {
         'order': order
     })
+
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def api_proxy(request):
+    endpoint = request.GET.get('endpoint', '')
+
+    if request.method == 'GET':
+        if endpoint == 'orders':
+            result = FlaskAPIClient.get_orders(
+                status=request.GET.get('status')
+            )
+        elif endpoint == 'statistics':
+            result = FlaskAPIClient.get_statistics()
+        else:
+            result = {'error': 'Unknown endpoint'}
+    return JsonResponse(result)
 
 
 

@@ -37,4 +37,6 @@ urlpatterns = [
     path('operators/create/', views.operator_create, name='operator_create'),
     path('operators/<int:pk>/edit/', views.operator_edit, name='operator_edit'),
     path('operators/<int:pk>/delete/', views.operator_delete, name='operator_delete'),
+
+    path('api/proxy/', views.api_proxy, name='api_proxy'),
 ]
